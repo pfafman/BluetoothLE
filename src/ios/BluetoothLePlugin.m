@@ -1398,7 +1398,50 @@ NSString *const operationWrite = @"write";
     //Needed to support background mode
 }
 
-- (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
+
+// Returns either the object, or a copy of the object.
+// In either case, the result can be safely fed into sendDictionary.
+// May @throw the object if no conversion is implemented.
+- (NSObject*) prepareForJson: (NSObject*) o
+{
+    if([self isSafeToCopy:o])
+        return o;
+    if([o.class isSubclassOfClass:CBUUID.class]) {
+        if (floor(NSFoundationVersionNumber) < NSFoundationVersionNumber_iOS_7_1){
+               return [(CBUUID*)o uuidString];
+            } else {
+               return [(CBUUID*)o UUIDString];
+            }
+    }
+    if([o.class isSubclassOfClass:NSData.class]) {
+        return [(NSData*)o base64EncodedStringWithOptions:0];
+    }
+    if([o.class isSubclassOfClass:NSArray.class]) {
+        NSArray* a = (NSArray*)o;
+        NSMutableArray* ma = [NSMutableArray arrayWithCapacity:a.count];
+        for(int i=0; i<a.count; i++) {
+            [ma addObject:[self prepareForJson:[a objectAtIndex:i]]];
+        }
+        return ma;
+    }
+    if([o.class isSubclassOfClass:NSDictionary.class]) {
+        NSDictionary* src = (NSDictionary*)o;
+        NSMutableDictionary* newData = [NSMutableDictionary dictionaryWithCapacity:src.count];
+        [src enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+            id newKey = [self prepareForJson:key];
+            id newValue = [self prepareForJson:value];
+            [newData setObject:newValue forKey:newKey];
+        }];
+        return newData;
+    }
+    @throw o;
+}
+
+
+- (void)centralManager:(CBCentralManager *)central 
+ didDiscoverPeripheral:(CBPeripheral *)peripheral 
+     advertisementData:(NSDictionary *)advertisementData 
+                  RSSI:(NSNumber *)RSSI
 {
     //If no scan callback, nothing can be returned
     if (scanCallback == nil)
@@ -1410,6 +1453,8 @@ NSString *const operationWrite = @"write";
     NSData* data = [advertisementData valueForKey:CBAdvertisementDataManufacturerDataKey];
     NSString* dataString = [data base64EncodedStringWithOptions:0];
 
+    NSDictionary* fullData = (NSDictionary*) [self prepareForJson:advertisementData];
+
     NSMutableDictionary* returnObj = [NSMutableDictionary dictionary];
 
     [self addDevice:peripheral :returnObj];
@@ -1417,6 +1462,7 @@ NSString *const operationWrite = @"write";
     [returnObj setValue:statusScanResult forKey:keyStatus];
     [returnObj setValue:RSSI forKey:keyRssi];
     [returnObj setValue:dataString forKey:keyAdvertisement];
+    [returnObj setValue:fullData forKey:@"advertisementData"];
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:returnObj];
     [pluginResult setKeepCallbackAsBool:true];
