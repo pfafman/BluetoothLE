@@ -1399,6 +1399,17 @@ NSString *const operationWrite = @"write";
 }
 
 
+// Returns true if the object can be safely fed into sendDictionary, false otherwise.
+- (bool) isSafeToCopy: (NSObject*) o
+{
+    Class c = o.class;
+    return ([c isSubclassOfClass:NSString.class] ||
+        [c isSubclassOfClass:NSNull.class] ||
+        [c isSubclassOfClass:NSNumber.class] ||
+        [c isSubclassOfClass:NSValue.class] ||
+        false);
+}
+
 // Returns either the object, or a copy of the object.
 // In either case, the result can be safely fed into sendDictionary.
 // May @throw the object if no conversion is implemented.
@@ -1408,9 +1419,9 @@ NSString *const operationWrite = @"write";
         return o;
     if([o.class isSubclassOfClass:CBUUID.class]) {
         if (floor(NSFoundationVersionNumber) < NSFoundationVersionNumber_iOS_7_1){
-               return [(CBUUID*)o uuidString];
+               return [(CBUUID*)o representativeString];
             } else {
-               return [(CBUUID*)o UUIDString];
+               return [(CBUUID*)o representativeString];
             }
     }
     if([o.class isSubclassOfClass:NSData.class]) {
