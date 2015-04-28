@@ -394,11 +394,13 @@ public class BluetoothLePlugin extends CordovaPlugin
       isDiscoveredAction(args, callbackContext);
       return true;
     }
+    /*
     else if (requestConnectionPriorityActionName.equals(action))
     {
       requestConnectionPriorityAction(args, callbackContext);
       return true;
     }
+    */
     return false;
   }
 
@@ -1689,6 +1691,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     callbackContext.success(returnObj);
   }
 
+  /*
   private void requestConnectionPriorityAction(JSONArray args, CallbackContext callbackContext)
   {
     if(isNotInitialized(callbackContext, true))
@@ -1731,9 +1734,9 @@ public class BluetoothLePlugin extends CordovaPlugin
       return;
     }
 
-    String priority = obj.optString(keyConnectionPriority, null);
+    String priority = null //obj.optString(keyConnectionPriority, null);
 
-    int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+    //int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
 
     if (priority == null)
     {
@@ -1747,6 +1750,7 @@ public class BluetoothLePlugin extends CordovaPlugin
         callbackContext.error(returnObj);
       return;
     }
+    
     else if (priority.equals(propertyConnectionPriorityLow))
     {
       androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
@@ -1771,7 +1775,7 @@ public class BluetoothLePlugin extends CordovaPlugin
       callbackContext.error(returnObj);
       return;
     }
-
+    
 
     boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
 
@@ -1797,6 +1801,7 @@ public class BluetoothLePlugin extends CordovaPlugin
       callbackContext.success(returnObj);
     }
   }
+  */
 
   @Override
   public void onDestroy()
