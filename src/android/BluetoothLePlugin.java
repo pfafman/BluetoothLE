@@ -1799,62 +1799,62 @@ public class BluetoothLePlugin extends CordovaPlugin
 
   //     callbackContext.success(returnObj);
   //   }
-  // }
+  }
 
-  // @Override
-  // public void onDestroy()
-  // {
-  //     super.onDestroy();
+  @Override
+  public void onDestroy()
+  {
+      super.onDestroy();
 
-  //     if (isReceiverRegistered)
-  //     {
-  //       cordova.getActivity().unregisterReceiver(mReceiver);
-  //     }
-  // }
+      if (isReceiverRegistered)
+      {
+        cordova.getActivity().unregisterReceiver(mReceiver);
+      }
+  }
 
-  // private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-  //   @Override
-  //   public void onReceive(Context context, Intent intent)
-  //   {
-  //     if (initCallbackContext == null)
-  //     {
-  //       return;
-  //     }
+  private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent)
+    {
+      if (initCallbackContext == null)
+      {
+        return;
+      }
 
-  //     if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED))
-  //     {
-  //       JSONObject returnObj = new JSONObject();
-  //       PluginResult pluginResult;
+      if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED))
+      {
+        JSONObject returnObj = new JSONObject();
+        PluginResult pluginResult;
 
-  //       switch (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR))
-  //       {
-  //         case BluetoothAdapter.STATE_OFF:
-  //         //case BluetoothAdapter.STATE_TURNING_OFF:
-  //         //case BluetoothAdapter.STATE_TURNING_ON:
+        switch (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR))
+        {
+          case BluetoothAdapter.STATE_OFF:
+          //case BluetoothAdapter.STATE_TURNING_OFF:
+          //case BluetoothAdapter.STATE_TURNING_ON:
 
-  //           addProperty(returnObj, keyError, errorEnable);
-  //           addProperty(returnObj, keyMessage, logNotEnabled);
+            addProperty(returnObj, keyError, errorEnable);
+            addProperty(returnObj, keyMessage, logNotEnabled);
 
-  //           connections = new HashMap<Object, HashMap<Object,Object>>();
-  //           scanCallbackContext = null;
+            connections = new HashMap<Object, HashMap<Object,Object>>();
+            scanCallbackContext = null;
 
-  //           pluginResult = new PluginResult(PluginResult.Status.ERROR, returnObj);
-  //           pluginResult.setKeepCallback(true);
-  //           initCallbackContext.sendPluginResult(pluginResult);
+            pluginResult = new PluginResult(PluginResult.Status.ERROR, returnObj);
+            pluginResult.setKeepCallback(true);
+            initCallbackContext.sendPluginResult(pluginResult);
 
-  //           break;
-  //         case BluetoothAdapter.STATE_ON:
+            break;
+          case BluetoothAdapter.STATE_ON:
 
-  //           addProperty(returnObj, keyStatus, statusEnabled);
+            addProperty(returnObj, keyStatus, statusEnabled);
 
-  //           pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
-  //           pluginResult.setKeepCallback(true);
-  //           initCallbackContext.sendPluginResult(pluginResult);
+            pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
+            pluginResult.setKeepCallback(true);
+            initCallbackContext.sendPluginResult(pluginResult);
 
-  //           break;
-  //       }
-  //     }
-  //   }
+            break;
+        }
+      }
+    }
   };
 
   @Override
