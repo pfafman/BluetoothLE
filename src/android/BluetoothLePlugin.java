@@ -1733,72 +1733,72 @@ public class BluetoothLePlugin extends CordovaPlugin
       return;
     }
 
-  //   String priority = obj.optString(keyConnectionPriority, null);
+    String priority = obj.optString(keyConnectionPriority, null);
 
-  //   int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+    int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
 
-  //   if (priority == null)
-  //   {
-  //       JSONObject returnObj = new JSONObject();
+    if (priority == null)
+    {
+        JSONObject returnObj = new JSONObject();
 
-  //       addDevice(returnObj, bluetoothGatt.getDevice());
+        addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //       addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //       addProperty(returnObj, keyMessage, logRequestConnectionPriorityNull);
+        addProperty(returnObj, keyError, errorRequestConnectionPriority);
+        addProperty(returnObj, keyMessage, logRequestConnectionPriorityNull);
 
-  //       callbackContext.error(returnObj);
-  //     return;
-  //   }
+        callbackContext.error(returnObj);
+      return;
+    }
     
-  //   else if (priority.equals(propertyConnectionPriorityLow))
-  //   {
-  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
-  //   }
-  //   else if (priority.equals(propertyConnectionPriorityBalanced))
-  //   {
-  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
-  //   }
-  //   else if (priority.equals(propertyConnectionPriorityHigh))
-  //   {
-  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_HIGH;
-  //   }
-  //   else
-  //   {
-  //   JSONObject returnObj = new JSONObject();
+    else if (priority.equals(propertyConnectionPriorityLow))
+    {
+      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
+    }
+    else if (priority.equals(propertyConnectionPriorityBalanced))
+    {
+      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+    }
+    else if (priority.equals(propertyConnectionPriorityHigh))
+    {
+      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_HIGH;
+    }
+    else
+    {
+    JSONObject returnObj = new JSONObject();
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //     addProperty(returnObj, keyMessage, logRequestConnectionPriorityInvalid);
+      addProperty(returnObj, keyError, errorRequestConnectionPriority);
+      addProperty(returnObj, keyMessage, logRequestConnectionPriorityInvalid);
 
-  //     callbackContext.error(returnObj);
-  //     return;
-  //   }
+      callbackContext.error(returnObj);
+      return;
+    }
     
 
-  //   boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
+    boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
 
-  //   if (!result)
-  //   {
-  //     JSONObject returnObj = new JSONObject();
+    if (!result)
+    {
+      JSONObject returnObj = new JSONObject();
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //     addProperty(returnObj, keyMessage, logRequestConnectionPriorityFailed);
+      addProperty(returnObj, keyError, errorRequestConnectionPriority);
+      addProperty(returnObj, keyMessage, logRequestConnectionPriorityFailed);
 
-  //     callbackContext.error(returnObj);
-  //   }
-  //   else
-  //   {
-  //     JSONObject returnObj = new JSONObject();
+      callbackContext.error(returnObj);
+    }
+    else
+    {
+      JSONObject returnObj = new JSONObject();
 
-  //     addProperty(returnObj, keyStatus, statusConnectionPriorityRequested);
+      addProperty(returnObj, keyStatus, statusConnectionPriorityRequested);
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     callbackContext.success(returnObj);
-  //   }
+      callbackContext.success(returnObj);
+    }
   }
 
   @Override
