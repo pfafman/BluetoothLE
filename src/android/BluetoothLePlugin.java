@@ -396,7 +396,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     else if (requestConnectionPriorityActionName.equals(action))
     {
-      requestConnectionPriorityAction(args, callbackContext);
+      //requestConnectionPriorityAction(args, callbackContext);
       return true;
     }
     return false;
@@ -1690,116 +1690,116 @@ public class BluetoothLePlugin extends CordovaPlugin
   }
 
 
-  private void requestConnectionPriorityAction(JSONArray args, CallbackContext callbackContext)
-  {
+  // private void requestConnectionPriorityAction(JSONArray args, CallbackContext callbackContext)
+  // {
     
-    if(isNotInitialized(callbackContext, true))
-    {
-      return;
-    }
+  //   if(isNotInitialized(callbackContext, true))
+  //   {
+  //     return;
+  //   }
 
-    JSONObject obj = getArgsObject(args);
+  //   JSONObject obj = getArgsObject(args);
 
-    if (isNotArgsObject(obj, callbackContext))
-    {
-      return;
-    }
+  //   if (isNotArgsObject(obj, callbackContext))
+  //   {
+  //     return;
+  //   }
 
-    String address = getAddress(obj);
+  //   String address = getAddress(obj);
 
-    if (isNotAddress(address, callbackContext))
-    {
-      return;
-    }
+  //   if (isNotAddress(address, callbackContext))
+  //   {
+  //     return;
+  //   }
 
-    HashMap<Object, Object> connection = wasNeverConnected(address, callbackContext);
-    if (connection == null)
-    {
-      return;
-    }
+  //   HashMap<Object, Object> connection = wasNeverConnected(address, callbackContext);
+  //   if (connection == null)
+  //   {
+  //     return;
+  //   }
 
-    BluetoothGatt bluetoothGatt = (BluetoothGatt)connection.get(keyPeripheral);
+  //   BluetoothGatt bluetoothGatt = (BluetoothGatt)connection.get(keyPeripheral);
     
-    if (Build.VERSION.SDK_INT < 21)
-    {
-      JSONObject returnObj = new JSONObject();
+  //   if (Build.VERSION.SDK_INT < 21)
+  //   {
+  //     JSONObject returnObj = new JSONObject();
 
-      addDevice(returnObj, bluetoothGatt.getDevice());
+  //     addDevice(returnObj, bluetoothGatt.getDevice());
 
-      addProperty(returnObj, keyError, errorRequestConnectionPriority);
-      addProperty(returnObj, keyMessage, logRequestConnectionPrioritySdk);
+  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
+  //     addProperty(returnObj, keyMessage, logRequestConnectionPrioritySdk);
 
-      callbackContext.error(returnObj);
-      return;
-    }
+  //     callbackContext.error(returnObj);
+  //     return;
+  //   }
 
-    String priority = obj.optString(keyConnectionPriority, null);
+  //   String priority = obj.optString(keyConnectionPriority, null);
 
-    int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+  //   int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
 
-    if (priority == null)
-    {
-        JSONObject returnObj = new JSONObject();
+  //   if (priority == null)
+  //   {
+  //       JSONObject returnObj = new JSONObject();
 
-        addDevice(returnObj, bluetoothGatt.getDevice());
+  //       addDevice(returnObj, bluetoothGatt.getDevice());
 
-        addProperty(returnObj, keyError, errorRequestConnectionPriority);
-        addProperty(returnObj, keyMessage, logRequestConnectionPriorityNull);
+  //       addProperty(returnObj, keyError, errorRequestConnectionPriority);
+  //       addProperty(returnObj, keyMessage, logRequestConnectionPriorityNull);
 
-        callbackContext.error(returnObj);
-      return;
-    }
+  //       callbackContext.error(returnObj);
+  //     return;
+  //   }
     
-    else if (priority.equals(propertyConnectionPriorityLow))
-    {
-      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
-    }
-    else if (priority.equals(propertyConnectionPriorityBalanced))
-    {
-      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
-    }
-    else if (priority.equals(propertyConnectionPriorityHigh))
-    {
-      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_HIGH;
-    }
-    else
-    {
-    JSONObject returnObj = new JSONObject();
+  //   else if (priority.equals(propertyConnectionPriorityLow))
+  //   {
+  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
+  //   }
+  //   else if (priority.equals(propertyConnectionPriorityBalanced))
+  //   {
+  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+  //   }
+  //   else if (priority.equals(propertyConnectionPriorityHigh))
+  //   {
+  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_HIGH;
+  //   }
+  //   else
+  //   {
+  //   JSONObject returnObj = new JSONObject();
 
-      addDevice(returnObj, bluetoothGatt.getDevice());
+  //     addDevice(returnObj, bluetoothGatt.getDevice());
 
-      addProperty(returnObj, keyError, errorRequestConnectionPriority);
-      addProperty(returnObj, keyMessage, logRequestConnectionPriorityInvalid);
+  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
+  //     addProperty(returnObj, keyMessage, logRequestConnectionPriorityInvalid);
 
-      callbackContext.error(returnObj);
-      return;
-    }
+  //     callbackContext.error(returnObj);
+  //     return;
+  //   }
     
 
-    boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
+  //   boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
 
-    if (!result)
-    {
-      JSONObject returnObj = new JSONObject();
+  //   if (!result)
+  //   {
+  //     JSONObject returnObj = new JSONObject();
 
-      addDevice(returnObj, bluetoothGatt.getDevice());
+  //     addDevice(returnObj, bluetoothGatt.getDevice());
 
-      addProperty(returnObj, keyError, errorRequestConnectionPriority);
-      addProperty(returnObj, keyMessage, logRequestConnectionPriorityFailed);
+  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
+  //     addProperty(returnObj, keyMessage, logRequestConnectionPriorityFailed);
 
-      callbackContext.error(returnObj);
-    }
-    else
-    {
-      JSONObject returnObj = new JSONObject();
+  //     callbackContext.error(returnObj);
+  //   }
+  //   else
+  //   {
+  //     JSONObject returnObj = new JSONObject();
 
-      addProperty(returnObj, keyStatus, statusConnectionPriorityRequested);
+  //     addProperty(returnObj, keyStatus, statusConnectionPriorityRequested);
 
-      addDevice(returnObj, bluetoothGatt.getDevice());
+  //     addDevice(returnObj, bluetoothGatt.getDevice());
 
-      callbackContext.success(returnObj);
-    }
-  }
+  //     callbackContext.success(returnObj);
+  //   }
+  // }
 
   @Override
   public void onDestroy()
