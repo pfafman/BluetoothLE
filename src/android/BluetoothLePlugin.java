@@ -1973,8 +1973,8 @@ public class BluetoothLePlugin extends CordovaPlugin
         {
           return;
         }
-        for (ScanResult sr : results) {
-          Log.i("ScanResult - Results", sr.toString());
+        for (ScanResult result : results) {
+          Log.i("ScanResult - Results", result.toString());
           
           JSONObject returnObj = new JSONObject();
           addDevice(returnObj, result.getDevice());
