@@ -24,7 +24,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 
-import android.bluetooth.le.BluetoothLeScanner
+import android.bluetooth.le.BluetoothLeScanner;
 
 
 import java.util.ArrayList;
@@ -591,11 +591,17 @@ public class BluetoothLePlugin extends CordovaPlugin
     {
       //result = bluetoothAdapter.startLeScan(serviceUuids, scanCallback);
       List<ScanFilter> filters = new ArrayList<ScanFilter>();
-      scanner.startScan(filters, settings, scanCallback);
 
+      for (UUID serviceUuid : serviceUuids) {
+        ScanFilter uuidFilter = new ScanFilter.Builder().setServiceUuid(new ParcelUuid(serviceUuid)).build();
+        filters.add(uuidFilter)
+      }
+
+      scanner.startScan(filters, settings, scanCallback);
 
     }
 
+    result = true;  // Need to figure out how to handle startup error
     //If the scan didn't start...
     if (!result)
     {
