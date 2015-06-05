@@ -649,7 +649,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     // BLE Adapter
     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
     // Stop scan
-    scanner.stopScan(scanCallback);
+    scanner.stopScan(scanCallback21);
 
     //Set scanning state
     scanCallbackContext = null;
