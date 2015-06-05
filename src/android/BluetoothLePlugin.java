@@ -573,7 +573,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     scanCallbackContext = callbackContext;
 
     // BLE Adapter
-    BluetoothLeScanner scanner = getBluetoothAdapter().getBluetoothLeScanner();
+    BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
 
     ScanSettings settings = new ScanSettings.Builder()
       .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -640,7 +640,11 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
 
     //Stop the scan
-    bluetoothAdapter.stopLeScan(scanCallback);
+    //bluetoothAdapter.stopLeScan(scanCallback);
+
+    // BLE Adapter
+    BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
+    scanner.stopScan(scanCallback);
 
     //Set scanning state
     scanCallbackContext = null;
