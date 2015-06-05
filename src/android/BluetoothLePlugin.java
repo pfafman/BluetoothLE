@@ -585,12 +585,11 @@ public class BluetoothLePlugin extends CordovaPlugin
       .build();
 
     //Start the scan with or without service UUIDs
-    boolean result;
     if (serviceUuids == null || serviceUuids.length == 0)
     {
       //result = bluetoothAdapter.startLeScan(scanCallback);
       List<ScanFilter> filters = new ArrayList<ScanFilter>();
-      scanner.startScan(filters, settings, scanCallback);
+      scanner.startScan(filters, settings, scanCallback21);
     }
     else
     {
@@ -602,20 +601,21 @@ public class BluetoothLePlugin extends CordovaPlugin
         filters.add(uuidFilter);
       }
 
-      scanner.startScan(filters, settings, scanCallback);
+      scanner.startScan(filters, settings, scanCallback21);
 
     }
 
-    result = true;  // Need to figure out how to handle startup error
-    //If the scan didn't start...
-    if (!result)
-    {
-      addProperty(returnObj, keyError, errorStartScan);
-      addProperty(returnObj, keyMessage, logScanStartFail);
-      callbackContext.error(returnObj);
-      scanCallbackContext = null;
-      return;
-    }
+    // boolean result;
+    // result = true;  // Need to figure out how to handle startup error
+    // //If the scan didn't start...
+    // if (!result)
+    // {
+    //   addProperty(returnObj, keyError, errorStartScan);
+    //   addProperty(returnObj, keyMessage, logScanStartFail);
+    //   callbackContext.error(returnObj);
+    //   scanCallbackContext = null;
+    //   return;
+    // }
 
     //Notify user of started scan and save callback
     addProperty(returnObj, keyStatus, statusScanStarted);
@@ -1940,6 +1940,63 @@ public class BluetoothLePlugin extends CordovaPlugin
       scanCallbackContext.sendPluginResult(pluginResult);
     }
   };
+
+  //Scan Callback SDK 21
+  private ScanCallback scanCallback21 = new ScanCallback() {
+      @Override
+      public void onScanResult(int callbackType, ScanResult result) {
+        
+        Log.i("onScanResult", result.toString());
+
+        if (scanCallbackContext == null)
+        {
+          return;
+        }
+        
+        JSONObject returnObj = new JSONObject();
+        addDevice(returnObj, result.getDevice());
+        addProperty(returnObj, keyRssi, result.getRssi());
+        addPropertyBytes(returnObj, keyAdvertisement, result.getScanRecord);
+        addProperty(returnObj, keyStatus, statusScanResult);
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
+        pluginResult.setKeepCallback(true);
+        scanCallbackContext.sendPluginResult(pluginResult);
+
+      }
+
+      @Override
+      public void onBatchScanResults(List<ScanResult> results) {
+        if (scanCallbackContext == null)
+        {
+          return;
+        }
+        for (ScanResult sr : results) {
+          Log.i("ScanResult - Results", sr.toString());
+          
+          JSONObject returnObj = new JSONObject();
+          addDevice(returnObj, result.getDevice());
+          addProperty(returnObj, keyRssi, result.getRssi());
+          addPropertyBytes(returnObj, keyAdvertisement, result.getScanRecord);
+          addProperty(returnObj, keyStatus, statusScanResult);
+          PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
+          pluginResult.setKeepCallback(true);
+          scanCallbackContext.sendPluginResult(pluginResult);
+              
+        }
+      }
+
+      @Override
+      public void onScanFailed(int errorCode) {
+        Log.e("Scan Failed", "Error Code: " + errorCode);
+
+        JSONObject returnObj = new JSONObject();
+        addProperty(returnObj, keyError, errorStartScan);
+        addProperty(returnObj, keyMessage, logScanStartFail);
+        callbackContext.error(returnObj);
+        scanCallbackContext = null;
+      }
+  };
+
 
   private String formatUuid(UUID uuid)
   {
