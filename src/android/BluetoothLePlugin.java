@@ -30,6 +30,8 @@ import android.bluetooth.le.ScanSettings;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+
+// Debugging 
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -1957,7 +1959,7 @@ public class BluetoothLePlugin extends CordovaPlugin
         JSONObject returnObj = new JSONObject();
         addDevice(returnObj, result.getDevice());
         addProperty(returnObj, keyRssi, result.getRssi());
-        addPropertyBytes(returnObj, keyAdvertisement, result.getScanRecord);
+        addPropertyBytes(returnObj, keyAdvertisement, result.getScanRecord());
         addProperty(returnObj, keyStatus, statusScanResult);
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
         pluginResult.setKeepCallback(true);
@@ -1977,7 +1979,7 @@ public class BluetoothLePlugin extends CordovaPlugin
           JSONObject returnObj = new JSONObject();
           addDevice(returnObj, result.getDevice());
           addProperty(returnObj, keyRssi, result.getRssi());
-          addPropertyBytes(returnObj, keyAdvertisement, result.getScanRecord);
+          addPropertyBytes(returnObj, keyAdvertisement, result.getScanRecord());
           addProperty(returnObj, keyStatus, statusScanResult);
           PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
           pluginResult.setKeepCallback(true);
