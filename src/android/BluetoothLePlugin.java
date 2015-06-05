@@ -24,6 +24,9 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 
+import android.bluetooth.le.BluetoothLeScanner
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
