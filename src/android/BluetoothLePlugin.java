@@ -572,7 +572,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     BluetoothLeScanner scanner = getBluetoothAdapter().getBluetoothLeScanner();
 
     ScanSettings settings = new ScanSettings.Builder()
-      .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY))
+      .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
       .setReportDelay(0)
       .build();
 
