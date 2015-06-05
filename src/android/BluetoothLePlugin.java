@@ -540,6 +540,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     //Else listen to initialize callback for disabling
   }
 
+  // Start Scan SDK > 21 !!!!  TEP
   private void startScanAction(JSONArray args, CallbackContext callbackContext)
   {
     if (isNotInitialized(callbackContext, true))
@@ -594,7 +595,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
       for (UUID serviceUuid : serviceUuids) {
         ScanFilter uuidFilter = new ScanFilter.Builder().setServiceUuid(new ParcelUuid(serviceUuid)).build();
-        filters.add(uuidFilter)
+        filters.add(uuidFilter);
       }
 
       scanner.startScan(filters, settings, scanCallback);
