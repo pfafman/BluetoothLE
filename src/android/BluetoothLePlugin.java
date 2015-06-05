@@ -1991,11 +1991,14 @@ public class BluetoothLePlugin extends CordovaPlugin
       @Override
       public void onScanFailed(int errorCode) {
         Log.e("Scan Failed", "Error Code: " + errorCode);
-
+        if (scanCallbackContext == null)
+        {
+          return;
+        }
         JSONObject returnObj = new JSONObject();
         addProperty(returnObj, keyError, errorStartScan);
         addProperty(returnObj, keyMessage, logScanStartFail);
-        callbackContext.error(returnObj);
+        scanCallbackContext.error(returnObj);
         scanCallbackContext = null;
       }
   };
