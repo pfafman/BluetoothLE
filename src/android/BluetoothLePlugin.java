@@ -24,8 +24,12 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 
+// SDK 21
 import android.bluetooth.le.BluetoothLeScanner;
-
+import android.bluetooth.le.ScanSettings;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -639,11 +643,12 @@ public class BluetoothLePlugin extends CordovaPlugin
       return;
     }
 
-    //Stop the scan
+    // Stop the scan
     //bluetoothAdapter.stopLeScan(scanCallback);
 
     // BLE Adapter
     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
+    // Stop scan
     scanner.stopScan(scanCallback);
 
     //Set scanning state
