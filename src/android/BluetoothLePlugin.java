@@ -45,6 +45,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@TargetApi(21)
+
 public class BluetoothLePlugin extends CordovaPlugin
 {
   //Initialization related variables
