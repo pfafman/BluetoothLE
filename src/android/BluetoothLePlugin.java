@@ -626,6 +626,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
     //Notify user of started scan and save callback
     addProperty(returnObj, keyStatus, statusScanStarted);
+    addProperty(returnObj, "SDK", "21");
 
     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
     pluginResult.setKeepCallback(true);
