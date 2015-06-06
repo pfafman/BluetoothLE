@@ -1374,6 +1374,19 @@ if (obj.status == "subscribedResult")
 }
 ```
 
+## Meteor
+
+* Install platform-21 manually using `~/.meteor/android_bundle/android-sdk/tools/android`.
+
+* Set the android-targetSdkVersion preference to 21. Add `App.setPreference('android-targetSdkVersion', '21');` to `mobile-config.js`
+
+* Create the [cordova-build-override/platforms/android/ folder](https://github.com/don/cordova-plugin-ble-central#advertising-data) in the main meteor app top level folder.
+
+* Copy the `project.properties` from `.meteor/local/cordova-build/platforms/android/` to the `cordova-build-override/platforms/android/` folder
+
+* Change the android-19 in the project.properties file to android-21.
+
+
 
 ## More information ##
 * Author: Rand Dusing
