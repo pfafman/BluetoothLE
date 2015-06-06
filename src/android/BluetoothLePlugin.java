@@ -14,8 +14,9 @@ import android.os.Build;
 import android.util.Base64;
 
 import android.app.Activity;
+
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothAdapter.LeScanCallback;
+//import android.bluetooth.BluetoothAdapter.LeScanCallback;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -595,7 +596,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     {
       //result = bluetoothAdapter.startLeScan(scanCallback);
       List<ScanFilter> filters = new ArrayList<ScanFilter>();
-      scanner.startScan(filters, settings, scanCallback21);
+      scanner.startScan(filters, settings, scanCallback);
     }
     else
     {
@@ -607,7 +608,7 @@ public class BluetoothLePlugin extends CordovaPlugin
         filters.add(uuidFilter);
       }
 
-      scanner.startScan(filters, settings, scanCallback21);
+      scanner.startScan(filters, settings, scanCallback);
 
     }
 
@@ -655,7 +656,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     // BLE Adapter
     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
     // Stop scan
-    scanner.stopScan(scanCallback21);
+    scanner.stopScan(scanCallback);
 
     //Set scanning state
     scanCallbackContext = null;
@@ -1922,33 +1923,33 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
   }
 
-  //Scan Callback
-  private LeScanCallback scanCallback = new LeScanCallback()
-  {
-    @Override
-    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord)
-    {
-      if (scanCallbackContext == null)
-      {
-        return;
-      }
+  // //Scan Callback
+  // private LeScanCallback scanCallback = new LeScanCallback()
+  // {
+  //   @Override
+  //   public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord)
+  //   {
+  //     if (scanCallbackContext == null)
+  //     {
+  //       return;
+  //     }
 
-      JSONObject returnObj = new JSONObject();
+  //     JSONObject returnObj = new JSONObject();
 
-      addDevice(returnObj, device);
+  //     addDevice(returnObj, device);
 
-      addProperty(returnObj, keyRssi, rssi);
-      addPropertyBytes(returnObj, keyAdvertisement, scanRecord);
-      addProperty(returnObj, keyStatus, statusScanResult);
+  //     addProperty(returnObj, keyRssi, rssi);
+  //     addPropertyBytes(returnObj, keyAdvertisement, scanRecord);
+  //     addProperty(returnObj, keyStatus, statusScanResult);
 
-      PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
-      pluginResult.setKeepCallback(true);
-      scanCallbackContext.sendPluginResult(pluginResult);
-    }
-  };
+  //     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
+  //     pluginResult.setKeepCallback(true);
+  //     scanCallbackContext.sendPluginResult(pluginResult);
+  //   }
+  // };
 
   //Scan Callback SDK 21
-  private ScanCallback scanCallback21 = new ScanCallback() {
+  private ScanCallback scanCallback = new ScanCallback() {
       @Override
       public void onScanResult(int callbackType, ScanResult result) {
         
