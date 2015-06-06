@@ -612,21 +612,15 @@ public class BluetoothLePlugin extends CordovaPlugin
 
     }
 
-    // boolean result;
-    // result = true;  // Need to figure out how to handle startup error
-    // //If the scan didn't start...
-    // if (!result)
-    // {
-    //   addProperty(returnObj, keyError, errorStartScan);
-    //   addProperty(returnObj, keyMessage, logScanStartFail);
-    //   callbackContext.error(returnObj);
-    //   scanCallbackContext = null;
-    //   return;
-    // }
 
     //Notify user of started scan and save callback
     addProperty(returnObj, keyStatus, statusScanStarted);
-    addProperty(returnObj, "SDK", "21");
+    addProperty(returnObj, "sdk", "21");
+    addProperty(returnObj, "callbackType", settings.getCallbackType());
+    addProperty(returnObj, "delay", settings.getReportDelayMillis());
+    addProperty(returnObj, "mode", settings.getScanMode());
+    addProperty(returnObj, "resultType", settings.getScanResultType());
+   
 
     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
     pluginResult.setKeepCallback(true);
