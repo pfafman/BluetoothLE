@@ -34,7 +34,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 
 // Debugging 
-import android.util.Log;
+//import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -588,7 +588,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
     ScanSettings settings = new ScanSettings.Builder()
       .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-      .setReportDelay(0)
+      //.setReportDelay(0)
       .build();
 
     //Start the scan with or without service UUIDs
@@ -1948,7 +1948,7 @@ public class BluetoothLePlugin extends CordovaPlugin
       @Override
       public void onScanResult(int callbackType, ScanResult result) {
         
-        Log.i("onScanResult", result.toString());
+        //Log.i("onScanResult", result.toString());
 
         if (scanCallbackContext == null)
         {
@@ -1973,7 +1973,7 @@ public class BluetoothLePlugin extends CordovaPlugin
           return;
         }
         for (ScanResult result : results) {
-          Log.i("ScanResult - Results", result.toString());
+          //Log.i("ScanResult - Results", result.toString());
           
           JSONObject returnObj = new JSONObject();
           addDevice(returnObj, result.getDevice());
@@ -1989,7 +1989,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
       @Override
       public void onScanFailed(int errorCode) {
-        Log.e("Scan Failed", "Error Code: " + errorCode);
+        //Log.e("Scan Failed", "Error Code: " + errorCode);
         if (scanCallbackContext == null)
         {
           return;
