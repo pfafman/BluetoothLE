@@ -286,12 +286,20 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     else if (startScanActionName.equals(action))
     {
-      startScanAction(args, callbackContext);
+      cordova.getThreadPool().execute(new Runnable() {
+        public void run() {
+          startScanAction(args, callbackContext);
+        }
+      });
       return true;
     }
     else if (stopScanActionName.equals(action))
     {
-      stopScanAction(callbackContext);
+      cordova.getThreadPool().execute(new Runnable() {
+        public void run() {
+          stopScanAction(callbackContext);
+        }
+      });
       return true;
     }
     else if (retrieveConnectedActionName.equals(action))
@@ -583,12 +591,12 @@ public class BluetoothLePlugin extends CordovaPlugin
     //Save the callback context for reporting back found connections. Also the isScanning flag
     scanCallbackContext = callbackContext;
 
-    final ScanSettings settings = new ScanSettings.Builder()
+    ScanSettings settings = new ScanSettings.Builder()
       .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
       //.setReportDelay(0)
       .build();
 
-    final List<ScanFilter> filters = new ArrayList<ScanFilter>();
+    List<ScanFilter> filters = new ArrayList<ScanFilter>();
 
     //Start the scan with or without service UUIDs
     if (serviceUuids != null && serviceUuids.length > 0)
@@ -600,13 +608,11 @@ public class BluetoothLePlugin extends CordovaPlugin
       }
     }
 
-    cordova.getThreadPool().execute(new Runnable() {
-      public void run() {
-        // BLE Adapter
-        BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
-        scanner.startScan(filters, settings, scanCallback);
-      }
-    });
+    
+    // BLE Adapter
+    BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
+    scanner.startScan(filters, settings, scanCallback);
+      
 
     //Notify user of started scan and save callback
     addProperty(returnObj, keyStatus, statusScanStarted);
@@ -645,15 +651,11 @@ public class BluetoothLePlugin extends CordovaPlugin
 
     
     // Stop scan
-    cordova.getThreadPool().execute(new Runnable() {
-      public void run() {
-        // BLE Adapter
-        BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
-        scanner.stopScan(scanCallback);
-      }
-    });
     
-
+    // BLE Adapter
+    BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
+    scanner.stopScan(scanCallback);
+    
     //Set scanning state
     scanCallbackContext = null;
 
