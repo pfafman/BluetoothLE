@@ -579,21 +579,23 @@ public class BluetoothLePlugin extends CordovaPlugin
       return;
     }
 
-    //Get the service UUIDs from the arguments
-    JSONObject obj = getArgsObject(args);
-
-    UUID[] serviceUuids = null;
-
-    if (obj != null)
-    {
-      serviceUuids = getServiceUuids(obj);
-    }
-
     //Save the callback context for reporting back found connections. Also the isScanning flag
     scanCallbackContext = callbackContext;
 
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
+
+        JSONObject returnObj = new JSONObject();
+        
+        //Get the service UUIDs from the arguments
+        JSONObject obj = getArgsObject(args);
+
+        UUID[] serviceUuids = null;
+
+        if (obj != null)
+        {
+          serviceUuids = getServiceUuids(obj);
+        }
 
         ScanSettings settings = new ScanSettings.Builder()
           .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -660,6 +662,7 @@ public class BluetoothLePlugin extends CordovaPlugin
         BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
         scanner.stopScan(scanCallback);
 
+        JSONObject returnObj = new JSONObject();
         //Inform user
         addProperty(returnObj, keyStatus, statusScanStopped);
         callbackContext.success(returnObj);
