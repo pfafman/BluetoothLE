@@ -287,20 +287,20 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     else if (startScanActionName.equals(action))
     {
-      cordova.getThreadPool().execute(new Runnable() {
-       public void run() {
+      // cordova.getThreadPool().execute(new Runnable() {
+      //  public void run() {
           startScanAction(args, callbackContext);
-       }
-      });
+      //  }
+      // });
       return true;
     }
     else if (stopScanActionName.equals(action))
     {
-      cordova.getThreadPool().execute(new Runnable() {
-       public void run() {
+      // cordova.getThreadPool().execute(new Runnable() {
+      //  public void run() {
           stopScanAction(callbackContext);
-       }
-      });
+      //  }
+      // });
       return true;
     }
     else if (retrieveConnectedActionName.equals(action))
@@ -609,10 +609,13 @@ public class BluetoothLePlugin extends CordovaPlugin
       }
     }
 
-    
-    // BLE Adapter
-    BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
-    scanner.startScan(filters, settings, scanCallback);
+    cordova.getThreadPool().execute(new Runnable() {
+       public void run() {
+        // BLE Adapter
+        BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
+        scanner.startScan(filters, settings, scanCallback);
+      }
+    });
       
 
     //Notify user of started scan and save callback
@@ -647,15 +650,14 @@ public class BluetoothLePlugin extends CordovaPlugin
       return;
     }
 
-    // Stop the scan
-    //bluetoothAdapter.stopLeScan(scanCallback);
-
-    
     // Stop scan
-    
-    // BLE Adapter
-    BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
-    scanner.stopScan(scanCallback);
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        // BLE Adapter
+        BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
+        scanner.stopScan(scanCallback);
+      }
+    });
     
     //Set scanning state
     scanCallbackContext = null;
