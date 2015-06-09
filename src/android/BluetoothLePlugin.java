@@ -561,7 +561,7 @@ public class BluetoothLePlugin extends CordovaPlugin
   }
 
   // Start Scan SDK > 21 !!!!  TEP
-  private void startScanAction(JSONArray args, CallbackContext callbackContext)
+  private void startScanAction(final JSONArray args, final CallbackContext callbackContext)
   {
     if (isNotInitialized(callbackContext, true))
     {
@@ -582,24 +582,27 @@ public class BluetoothLePlugin extends CordovaPlugin
     //Save the callback context for reporting back found connections. Also the isScanning flag
     scanCallbackContext = callbackContext;
 
+
     cordova.getThreadPool().execute(new Runnable() {
       public void run() {
 
-        JSONObject returnObj = new JSONObject();
-        
         //Get the service UUIDs from the arguments
         JSONObject obj = getArgsObject(args);
 
-        UUID[] serviceUuids = null;
+        final UUID[] serviceUuids
 
         if (obj != null)
         {
           serviceUuids = getServiceUuids(obj);
+        } else {
+          serviceUuids = null;
         }
+
+        JSONObject returnObj = new JSONObject();
 
         ScanSettings settings = new ScanSettings.Builder()
           .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-          //.setReportDelay(0)
+          .setReportDelay(0)
           .build();
 
         List<ScanFilter> filters = new ArrayList<ScanFilter>();
@@ -637,7 +640,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
   }
 
-  private void stopScanAction(CallbackContext callbackContext)
+  private void stopScanAction(final CallbackContext callbackContext)
   {
     if (isNotInitialized(callbackContext, true))
     {
