@@ -589,13 +589,11 @@ public class BluetoothLePlugin extends CordovaPlugin
         //Get the service UUIDs from the arguments
         JSONObject obj = getArgsObject(args);
 
-        final UUID[] serviceUuids
+        UUID[] serviceUuids = null
 
         if (obj != null)
         {
           serviceUuids = getServiceUuids(obj);
-        } else {
-          serviceUuids = null;
         }
 
         JSONObject returnObj = new JSONObject();
