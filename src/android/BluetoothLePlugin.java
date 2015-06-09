@@ -264,6 +264,7 @@ public class BluetoothLePlugin extends CordovaPlugin
   @Override
   public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException
   {
+
     //Execute the specified action
     if (initializeActionName.equals(action))
     {
@@ -286,20 +287,20 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     else if (startScanActionName.equals(action))
     {
-      //cordova.getThreadPool().execute(new Runnable() {
-      //  public void run() {
+      cordova.getThreadPool().execute(new Runnable() {
+       public void run() {
           startScanAction(args, callbackContext);
-      //  }
-      //});
+       }
+      });
       return true;
     }
     else if (stopScanActionName.equals(action))
     {
-      //cordova.getThreadPool().execute(new Runnable() {
-      //  public void run() {
+      cordova.getThreadPool().execute(new Runnable() {
+       public void run() {
           stopScanAction(callbackContext);
-      //  }
-      //});
+       }
+      });
       return true;
     }
     else if (retrieveConnectedActionName.equals(action))
