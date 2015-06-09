@@ -286,20 +286,20 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     else if (startScanActionName.equals(action))
     {
-      cordova.getThreadPool().execute(new Runnable() {
-        public void run() {
+      //cordova.getThreadPool().execute(new Runnable() {
+      //  public void run() {
           startScanAction(args, callbackContext);
-        }
-      });
+      //  }
+      //});
       return true;
     }
     else if (stopScanActionName.equals(action))
     {
-      cordova.getThreadPool().execute(new Runnable() {
-        public void run() {
+      //cordova.getThreadPool().execute(new Runnable() {
+      //  public void run() {
           stopScanAction(callbackContext);
-        }
-      });
+      //  }
+      //});
       return true;
     }
     else if (retrieveConnectedActionName.equals(action))
