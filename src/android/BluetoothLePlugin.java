@@ -670,6 +670,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     //Inform user
     addProperty(returnObj, keyStatus, statusScanStopped);
     LOG.i("BluetoothLePlugin:stopScan", "return");
+    LOG.i("BluetoothLePlugin:stopScan", callbackContext.getCallbackId());
     callbackContext.success(returnObj);
     LOG.i("BluetoothLePlugin:stopScan", "done");
   }
