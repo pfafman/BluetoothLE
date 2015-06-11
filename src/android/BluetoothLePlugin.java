@@ -16,7 +16,6 @@ import android.util.Base64;
 import android.app.Activity;
 
 import android.bluetooth.BluetoothAdapter;
-//import android.bluetooth.BluetoothAdapter.LeScanCallback;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -34,7 +33,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 
 // Debugging 
-//import android.util.Log;
+import org.apache.cordova.LOG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,9 +126,15 @@ public class BluetoothLePlugin extends CordovaPlugin
   private final String keyState = "state";
   private final String keyDiscoveredState = "discoveredState";
   private final String keyConnectionPriority = "connectionPriority";
+  private final String keyScanMode = "scanMode";
 
   //Write Types
   private final String writeTypeNoResponse = "noResponse";
+
+  // Scan Modes
+  private final String scanModeBalanced = "balanced";
+  private final String scanModeLowLatency = "lowLatency";
+  private final String scanModeLowPower = "lowPower";
 
   //Status Types
   private final String statusEnabled = "enabled";
@@ -410,7 +415,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     else if (requestConnectionPriorityActionName.equals(action))
     {
-      //requestConnectionPriorityAction(args, callbackContext);
+      requestConnectionPriorityAction(args, callbackContext);
       return true;
     }
     return false;
@@ -418,7 +423,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
   private void initializeAction(JSONArray args, CallbackContext callbackContext)
   {
-    //Save init callback
+    // Save init callback
     initCallbackContext = callbackContext;
 
     if (bluetoothAdapter != null)
@@ -453,12 +458,12 @@ public class BluetoothLePlugin extends CordovaPlugin
 
     if (obj != null && getStatusReceiver(obj))
     {
-      //Add a receiver to pick up when Bluetooth state changes
+      // Add a receiver to pick up when Bluetooth state changes
       activity.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
       isReceiverRegistered = true;
     }
 
-    //Get Bluetooth adapter via Bluetooth Manager
+    // Get Bluetooth adapter via Bluetooth Manager
     BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
     bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -466,7 +471,7 @@ public class BluetoothLePlugin extends CordovaPlugin
 
     JSONObject returnObj = new JSONObject();
 
-    //If it's already enabled,
+    // If it's already enabled,
     if (bluetoothAdapter.isEnabled())
     {
       addProperty(returnObj, keyStatus, statusEnabled);
@@ -482,14 +487,14 @@ public class BluetoothLePlugin extends CordovaPlugin
       request = getRequest(obj);
     }
 
-    //Request user to enable Bluetooth
+    // Request user to enable Bluetooth
     if (request)
     {
-      //Request Bluetooth to be enabled
+      // Request Bluetooth to be enabled
       Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
       cordova.startActivityForResult(this, enableBtIntent, REQUEST_BT_ENABLE);
     }
-    //No request, so send back not enabled
+    // No request, so send back not enabled
     else
     {
       addProperty(returnObj, keyError, errorEnable);
@@ -574,10 +579,12 @@ public class BluetoothLePlugin extends CordovaPlugin
     JSONObject obj = getArgsObject(args);
 
     UUID[] serviceUuids = null;
+    int scanMode = ScanSettings.SCAN_MODE_LOW_LATENCY
 
     if (obj != null)
     {
       serviceUuids = getServiceUuids(obj);
+      scanMode = getScanMode(obj);
     }
 
     //Save the callback context for reporting back found connections. Also the isScanning flag
@@ -587,8 +594,8 @@ public class BluetoothLePlugin extends CordovaPlugin
     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
 
     ScanSettings settings = new ScanSettings.Builder()
-      .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-      //.setReportDelay(0)
+      .setScanMode(scanMode)
+      .setReportDelay(0)
       .build();
 
     //Start the scan with or without service UUIDs
@@ -1725,116 +1732,116 @@ public class BluetoothLePlugin extends CordovaPlugin
   }
 
 
-  // private void requestConnectionPriorityAction(JSONArray args, CallbackContext callbackContext)
-  // {
+  private void requestConnectionPriorityAction(JSONArray args, CallbackContext callbackContext)
+  {
     
-  //   if(isNotInitialized(callbackContext, true))
-  //   {
-  //     return;
-  //   }
+    if(isNotInitialized(callbackContext, true))
+    {
+      return;
+    }
 
-  //   JSONObject obj = getArgsObject(args);
+    JSONObject obj = getArgsObject(args);
 
-  //   if (isNotArgsObject(obj, callbackContext))
-  //   {
-  //     return;
-  //   }
+    if (isNotArgsObject(obj, callbackContext))
+    {
+      return;
+    }
 
-  //   String address = getAddress(obj);
+    String address = getAddress(obj);
 
-  //   if (isNotAddress(address, callbackContext))
-  //   {
-  //     return;
-  //   }
+    if (isNotAddress(address, callbackContext))
+    {
+      return;
+    }
 
-  //   HashMap<Object, Object> connection = wasNeverConnected(address, callbackContext);
-  //   if (connection == null)
-  //   {
-  //     return;
-  //   }
+    HashMap<Object, Object> connection = wasNeverConnected(address, callbackContext);
+    if (connection == null)
+    {
+      return;
+    }
 
-  //   BluetoothGatt bluetoothGatt = (BluetoothGatt)connection.get(keyPeripheral);
+    BluetoothGatt bluetoothGatt = (BluetoothGatt)connection.get(keyPeripheral);
     
-  //   if (Build.VERSION.SDK_INT < 21)
-  //   {
-  //     JSONObject returnObj = new JSONObject();
+    if (Build.VERSION.SDK_INT < 21)
+    {
+      JSONObject returnObj = new JSONObject();
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //     addProperty(returnObj, keyMessage, logRequestConnectionPrioritySdk);
+      addProperty(returnObj, keyError, errorRequestConnectionPriority);
+      addProperty(returnObj, keyMessage, logRequestConnectionPrioritySdk);
 
-  //     callbackContext.error(returnObj);
-  //     return;
-  //   }
+      callbackContext.error(returnObj);
+      return;
+    }
 
-  //   String priority = obj.optString(keyConnectionPriority, null);
+    String priority = obj.optString(keyConnectionPriority, null);
 
-  //   int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+    int androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
 
-  //   if (priority == null)
-  //   {
-  //       JSONObject returnObj = new JSONObject();
+    if (priority == null)
+    {
+        JSONObject returnObj = new JSONObject();
 
-  //       addDevice(returnObj, bluetoothGatt.getDevice());
+        addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //       addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //       addProperty(returnObj, keyMessage, logRequestConnectionPriorityNull);
+        addProperty(returnObj, keyError, errorRequestConnectionPriority);
+        addProperty(returnObj, keyMessage, logRequestConnectionPriorityNull);
 
-  //       callbackContext.error(returnObj);
-  //     return;
-  //   }
+        callbackContext.error(returnObj);
+      return;
+    }
     
-  //   else if (priority.equals(propertyConnectionPriorityLow))
-  //   {
-  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
-  //   }
-  //   else if (priority.equals(propertyConnectionPriorityBalanced))
-  //   {
-  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
-  //   }
-  //   else if (priority.equals(propertyConnectionPriorityHigh))
-  //   {
-  //     androidPriority = BluetoothGatt.CONNECTION_PRIORITY_HIGH;
-  //   }
-  //   else
-  //   {
-  //   JSONObject returnObj = new JSONObject();
+    else if (priority.equals(propertyConnectionPriorityLow))
+    {
+      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER;
+    }
+    else if (priority.equals(propertyConnectionPriorityBalanced))
+    {
+      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_BALANCED;
+    }
+    else if (priority.equals(propertyConnectionPriorityHigh))
+    {
+      androidPriority = BluetoothGatt.CONNECTION_PRIORITY_HIGH;
+    }
+    else
+    {
+    JSONObject returnObj = new JSONObject();
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //     addProperty(returnObj, keyMessage, logRequestConnectionPriorityInvalid);
+      addProperty(returnObj, keyError, errorRequestConnectionPriority);
+      addProperty(returnObj, keyMessage, logRequestConnectionPriorityInvalid);
 
-  //     callbackContext.error(returnObj);
-  //     return;
-  //   }
+      callbackContext.error(returnObj);
+      return;
+    }
     
 
-  //   boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
+    boolean result = bluetoothGatt.requestConnectionPriority(androidPriority);
 
-  //   if (!result)
-  //   {
-  //     JSONObject returnObj = new JSONObject();
+    if (!result)
+    {
+      JSONObject returnObj = new JSONObject();
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     addProperty(returnObj, keyError, errorRequestConnectionPriority);
-  //     addProperty(returnObj, keyMessage, logRequestConnectionPriorityFailed);
+      addProperty(returnObj, keyError, errorRequestConnectionPriority);
+      addProperty(returnObj, keyMessage, logRequestConnectionPriorityFailed);
 
-  //     callbackContext.error(returnObj);
-  //   }
-  //   else
-  //   {
-  //     JSONObject returnObj = new JSONObject();
+      callbackContext.error(returnObj);
+    }
+    else
+    {
+      JSONObject returnObj = new JSONObject();
 
-  //     addProperty(returnObj, keyStatus, statusConnectionPriorityRequested);
+      addProperty(returnObj, keyStatus, statusConnectionPriorityRequested);
 
-  //     addDevice(returnObj, bluetoothGatt.getDevice());
+      addDevice(returnObj, bluetoothGatt.getDevice());
 
-  //     callbackContext.success(returnObj);
-  //   }
-  // }
+      callbackContext.success(returnObj);
+    }
+  }
 
   @Override
   public void onDestroy()
@@ -1918,30 +1925,6 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
   }
 
-  // //Scan Callback
-  // private LeScanCallback scanCallback = new LeScanCallback()
-  // {
-  //   @Override
-  //   public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord)
-  //   {
-  //     if (scanCallbackContext == null)
-  //     {
-  //       return;
-  //     }
-
-  //     JSONObject returnObj = new JSONObject();
-
-  //     addDevice(returnObj, device);
-
-  //     addProperty(returnObj, keyRssi, rssi);
-  //     addPropertyBytes(returnObj, keyAdvertisement, scanRecord);
-  //     addProperty(returnObj, keyStatus, statusScanResult);
-
-  //     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, returnObj);
-  //     pluginResult.setKeepCallback(true);
-  //     scanCallbackContext.sendPluginResult(pluginResult);
-  //   }
-  // };
 
   //Scan Callback SDK 21
   private ScanCallback scanCallback = new ScanCallback() {
@@ -2656,6 +2639,25 @@ public class BluetoothLePlugin extends CordovaPlugin
     }
     return BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
   }
+
+  private int getScanMode(JSONObject obj)
+  {
+    String scanMode = obj.optString(keyScanMode, null);
+
+    if (scanMode == null || scanMode.equals(scanModeLowLatency))
+    {
+      return ScanSettings.SCAN_MODE_LOW_LATENCY;
+    } 
+    else if scanMode.equals(scanModeBalanced) 
+    {
+      return ScanSettings.SCAN_MODE_BALANCED;
+    }
+    else if scanMode.equals(scanModeLowPower)
+    {
+      return ScanSettings.SCAN_MODE_LOW_POWER;
+    } else {
+      return ScanSettings.SCAN_MODE_LOW_LATENCY;
+    }
 
   private JSONObject getDiscovery(BluetoothGatt bluetoothGatt)
   {
