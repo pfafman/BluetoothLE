@@ -655,23 +655,23 @@ public class BleObserverPlugin extends CordovaPlugin
       return;
     }
 
-    LOG.i("BleObserverPlugin:stopScan:call");
+    LOG.i("BleObserverPlugin:stopScan", "call");
     
     // BLE Adapter
     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
     // Stop scan
     scanner.stopScan(scanCallback);
 
-    LOG.i("BleObserverPlugin:stopScan:stopped");
+    LOG.i("BleObserverPlugin:stopScan", "stopped");
 
     //Set scanning state
     scanCallbackContext = null;
 
     //Inform user
     addProperty(returnObj, keyStatus, statusScanStopped);
-    LOG.i("BleObserverPlugin:stopScan:return");
+    LOG.i("BleObserverPlugin:stopScan", "return");
     callbackContext.success(returnObj);
-    LOG.i("BleObserverPlugin:stopScan:done");
+    LOG.i("BleObserverPlugin:stopScan", "done");
   }
 
   private void retrieveConnectedAction(JSONArray args, CallbackContext callbackContext)
