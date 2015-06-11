@@ -48,7 +48,7 @@ import org.json.JSONObject;
 
 @TargetApi(21)
 
-public class BleObserverPlugin extends CordovaPlugin
+public class BluetoothLePlugin extends CordovaPlugin
 {
   //Initialization related variables
   private final int REQUEST_BT_ENABLE = 59627; /*Random integer*/
@@ -270,7 +270,7 @@ public class BleObserverPlugin extends CordovaPlugin
   public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException
   {
 
-    LOG.i("BleObserverPlugin:execute", action);
+    LOG.i("BluetoothLePlugin:execute", action);
 
     //Execute the specified action
     if (initializeActionName.equals(action))
@@ -655,23 +655,23 @@ public class BleObserverPlugin extends CordovaPlugin
       return;
     }
 
-    LOG.i("BleObserverPlugin:stopScan", "call");
+    LOG.i("BluetoothLePlugin:stopScan", "call");
     
     // BLE Adapter
     BluetoothLeScanner scanner = bluetoothAdapter.getBluetoothLeScanner();
     // Stop scan
     scanner.stopScan(scanCallback);
 
-    LOG.i("BleObserverPlugin:stopScan", "stopped");
+    LOG.i("BluetoothLePlugin:stopScan", "stopped");
 
     //Set scanning state
     scanCallbackContext = null;
 
     //Inform user
     addProperty(returnObj, keyStatus, statusScanStopped);
-    LOG.i("BleObserverPlugin:stopScan", "return");
+    LOG.i("BluetoothLePlugin:stopScan", "return");
     callbackContext.success(returnObj);
-    LOG.i("BleObserverPlugin:stopScan", "done");
+    LOG.i("BluetoothLePlugin:stopScan", "done");
   }
 
   private void retrieveConnectedAction(JSONArray args, CallbackContext callbackContext)
