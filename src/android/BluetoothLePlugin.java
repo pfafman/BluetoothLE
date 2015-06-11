@@ -2661,6 +2661,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     } else {
       return ScanSettings.SCAN_MODE_LOW_LATENCY;
     }
+  }
 
   private JSONObject getDiscovery(BluetoothGatt bluetoothGatt)
   {
