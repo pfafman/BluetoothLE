@@ -48,7 +48,7 @@ import org.json.JSONObject;
 
 @TargetApi(21)
 
-public class BluetoothLePlugin extends CordovaPlugin
+public class BleObserverPlugin extends CordovaPlugin
 {
   //Initialization related variables
   private final int REQUEST_BT_ENABLE = 59627; /*Random integer*/
