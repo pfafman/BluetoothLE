@@ -269,6 +269,9 @@ public class BluetoothLePlugin extends CordovaPlugin
   @Override
   public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException
   {
+
+    LOG.i("BleObserverPlugin:execute", action);
+
     //Execute the specified action
     if (initializeActionName.equals(action))
     {
