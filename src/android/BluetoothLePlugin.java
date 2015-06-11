@@ -582,7 +582,7 @@ public class BluetoothLePlugin extends CordovaPlugin
     JSONObject obj = getArgsObject(args);
 
     UUID[] serviceUuids = null;
-    int scanMode = ScanSettings.SCAN_MODE_LOW_LATENCY
+    int scanMode = ScanSettings.SCAN_MODE_LOW_LATENCY;
 
     if (obj != null)
     {
@@ -2651,11 +2651,11 @@ public class BluetoothLePlugin extends CordovaPlugin
     {
       return ScanSettings.SCAN_MODE_LOW_LATENCY;
     } 
-    else if scanMode.equals(scanModeBalanced) 
+    else if (scanMode.equals(scanModeBalanced) )
     {
       return ScanSettings.SCAN_MODE_BALANCED;
     }
-    else if scanMode.equals(scanModeLowPower)
+    else if (scanMode.equals(scanModeLowPower))
     {
       return ScanSettings.SCAN_MODE_LOW_POWER;
     } else {
