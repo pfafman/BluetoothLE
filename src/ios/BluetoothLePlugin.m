@@ -202,7 +202,7 @@ NSString *const operationWrite = @"write";
 - (void)startScan:(CDVInvokedUrlCommand *)command
 {
     
-    NSLog(@"startScan");
+    //NSLog(@"startScan");
     
     //Ensure Bluetooth is enabled
     if ([self isNotInitialized:command])
@@ -242,7 +242,7 @@ NSString *const operationWrite = @"write";
     //Start the scan
     [centralManager scanForPeripheralsWithServices:serviceUuids options:nil];
     
-    NSLog(@"startScan: started");
+    //NSLog(@"startScan: started");
 }
 
 - (void)stopScan:(CDVInvokedUrlCommand *)command
