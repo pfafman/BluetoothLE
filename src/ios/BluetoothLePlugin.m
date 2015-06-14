@@ -201,15 +201,20 @@ NSString *const operationWrite = @"write";
 
 - (void)startScan:(CDVInvokedUrlCommand *)command
 {
+    
+    NSLog(@"startScan");
+    
     //Ensure Bluetooth is enabled
     if ([self isNotInitialized:command])
     {
+        NSLog(@"startScan isNotInitialized");
         return;
     }
 
     //Ensure scan isn't already running
     if (scanCallback != nil)
     {
+        NSLog(@"startScan already scanning");
         NSDictionary* returnObj = [NSDictionary dictionaryWithObjectsAndKeys: errorStartScan, keyError, logAlreadyScanning, keyMessage, nil];
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:returnObj];
         [pluginResult setKeepCallbackAsBool:false];
@@ -236,6 +241,8 @@ NSString *const operationWrite = @"write";
 
     //Start the scan
     [centralManager scanForPeripheralsWithServices:serviceUuids options:nil];
+    
+    NSLog(@"startScan: started");
 }
 
 - (void)stopScan:(CDVInvokedUrlCommand *)command
